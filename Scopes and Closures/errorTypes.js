@@ -11,6 +11,7 @@ console.log(greeting);
 
 greeting = ."Hi"; // SyntaxError: unexpected token .
 
+
 /*****************************************************************************************************/
 
 // Early Errors
