@@ -52,37 +52,57 @@ function calculator() {
   var currentVal = "";
   var currentOper = "=";
 
-  return pressKey;
+  var publicAPI = {
+    number,
+    eq,
+    plus() {
+      return operator("+");
+    },
+    minus() {
+      return operator("-");
+    },
+    mult() {
+      return operator("*");
+    },
+    div() {
+      return operator("/");
+    },
+  };
+  return publicAPI;
 
   // ********************
+  // ********************
 
-  function pressKey(key) {
+  function number(key) {
     // number key?
     if (/\d/.test(key)) {
       currentVal += key;
       return key;
     }
-    // operator key?
-    else if (/[+*/-]/.test(key)) {
-      // multiple operations in a series?
-      if (currentOper != "=" && currentVal != "") {
-        // implied '=' keypress
-        pressKey("=");
-      } else if (currentVal != "") {
-        currentTotal = Number(currentVal);
-      }
-      currentOper = key;
-      currentVal = "";
-      return key;
-    }
+  }
+
+  function eq() {
     // = key?
-    else if (key == "=" && currentOper != "=") {
+    if (currentOper != "=") {
       currentTotal = op(currentTotal, currentOper, Number(currentVal));
       currentOper = "=";
       currentVal = "";
       return formatTotal(currentTotal);
     }
     return "";
+  }
+
+  function operator(key) {
+    // multiple operations in a series?
+    if (currentOper != "=" && currentVal != "") {
+      // implied '=' keypress
+      eq();
+    } else if (currentVal != "") {
+      currentTotal = Number(currentVal);
+    }
+    currentOper = key;
+    currentVal = "";
+    return key;
   }
 
   function op(val1, oper, val2) {
@@ -100,10 +120,10 @@ function calculator() {
 
 var calc = calculator();
 
-console.log(useCalc(calc, "4+3=")); // 4+3=7
-console.log(useCalc(calc, "+9=")); // +9=16
-console.log(useCalc(calc, "*8=")); // *5=128
-console.log(useCalc(calc, "7*2*3=")); // 7*2*3=42
-console.log(useCalc(calc, "1/0=")); // 1/0=ERR
-console.log(useCalc(calc, "+3=")); // +3=ERR
-console.log(useCalc(calc, "51=")); // 51
+useCalc(calc,"4+3=");           // 4+3=7
+useCalc(calc,"+9=");            // +9=16
+useCalc(calc,"*8=");            // *5=128
+useCalc(calc,"7*2*3=");         // 7*2*3=42
+useCalc(calc,"1/0=");           // 1/0=ERR
+useCalc(calc,"+3=");            // +3=ERR
+useCalc(calc,"51=");            // 51
